@@ -24,12 +24,12 @@ public abstract class Screen2D extends ScreenBase {
     private double screenSizeScale = 1.0;
 
     private BitmapFont font;
-    private SpriteBatch batch;
     private Stage stage;
     private Skin skin;
 
     private final Array<Entity> entities = new Array<Entity>();
 
+    private SpriteBatch batch;
     private TextureAtlas atlas;
 
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
