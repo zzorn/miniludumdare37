@@ -12,11 +12,13 @@ public class WorldCamImpl implements WorldCam {
     private int screenW = 100;
     private int screenH = 100;
 
-    private Pos worldFocusPos = new Pos(0,0);
+    private Pos worldFocusPos = new Pos(10,10);
     private float worldToScreenScaleFactor = 1;
 
     private float tileImageWidth = 128;
     private float tileImageHeight = 64;
+    private float tileImageDepth = 64;
+    private float layerOffset = 128;
 
     public void update(float deltaSeconds) {
         // TODO: Implement inertia and such to camera movements
@@ -31,9 +33,10 @@ public class WorldCamImpl implements WorldCam {
                 worldToScreenScaleFactor * 0.5f * tileImageWidth * (worldPos.y - worldFocusPos.y);
         screenPos.y = screenCenterY +
                 worldToScreenScaleFactor * 0.5f * tileImageHeight * (worldPos.x - worldFocusPos.x) +
-                worldToScreenScaleFactor * 0.5f * tileImageHeight * (worldPos.y - worldFocusPos.y);
+                worldToScreenScaleFactor * 0.5f * tileImageHeight * (worldPos.y - worldFocusPos.y) +
+                worldToScreenScaleFactor * tileImageDepth * (worldPos.z - worldFocusPos.z);
 
-        screenPos.z = screenPos.y;
+        screenPos.z = screenPos.y + worldPos.layer * layerOffset;
 
         return worldToScreenScaleFactor;
     }

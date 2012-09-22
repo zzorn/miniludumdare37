@@ -37,11 +37,11 @@ public class RenderSystem extends EntitySystem implements ResizeListener, Dispos
 
     private final Comparator<Entity> entityDrawOrderComparator = new Comparator<Entity>() {
         public int compare(Entity o1, Entity o2) {
-            Pos pos1 = posMapper.get(o1);
-            Pos pos2 = posMapper.get(o2);
+            float z1 = posMapper.get(o1).getDrawOrder();
+            float z2 = posMapper.get(o2).getDrawOrder();
 
-            if (pos1.z < pos2.z) return -1;
-            else if (pos1.z > pos2.z) return 1;
+            if (z1 > z2) return -1;
+            else if (z1 < z2) return 1;
             else return 0;
         }
     };

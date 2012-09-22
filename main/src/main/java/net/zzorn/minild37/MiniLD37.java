@@ -31,7 +31,8 @@ public class MiniLD37 implements ApplicationListener {
 
         world.initialize();
 
-        worldGenerator.generateWorld(world);
+        worldGenerator.init(world);
+        worldGenerator.generateWorld();
     }
 
     public void render() {

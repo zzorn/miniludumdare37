@@ -1,0 +1,82 @@
+
+images.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ground1
+  rotate: false
+  xy: 0, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ground5
+  rotate: false
+  xy: 128, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ground2
+  rotate: false
+  xy: 256, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ground3
+  rotate: false
+  xy: 384, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ground4
+  rotate: false
+  xy: 512, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+isometric_template
+  rotate: false
+  xy: 640, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+pine4
+  rotate: false
+  xy: 768, 64
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pine3
+  rotate: false
+  xy: 768, 0
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pine5
+  rotate: false
+  xy: 800, 64
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pine2
+  rotate: false
+  xy: 800, 0
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+pine1
+  rotate: false
+  xy: 832, 64
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
