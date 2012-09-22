@@ -1,17 +1,26 @@
-package net.zzorn.minild37.services.sound;
+package net.zzorn.minild37.systems;
 
+import com.artemis.Aspect;
+import com.artemis.ComponentMapper;
+import com.artemis.Entity;
+import com.artemis.EntitySystem;
+import com.artemis.annotations.Mapper;
+import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import net.zzorn.minild37.services.ServiceBase;
+import net.zzorn.minild37.components.Audible;
 import net.zzorn.minild37.utils.LRUCache;
+import net.zzorn.minild37.utils.Log;
 
 /**
- * Based on the SoundManager in http://steigert.blogspot.fi/2012/03/8-libgdx-tutorial-sound-and-music.html
+ *
  */
-public class SoundServiceImpl extends ServiceBase implements SoundService {
+public class SoundSystem extends EntitySystem implements Disposable{
+    @Mapper
+    private ComponentMapper<Audible> audibleMapper;
 
-    private static final int MAX_SOUNDS = 20;
+    private static final int MAX_SOUNDS = 30;
 
     /**
      * The volume to be set on the sound.
@@ -28,20 +37,45 @@ public class SoundServiceImpl extends ServiceBase implements SoundService {
      */
     private final LRUCache<String, Sound> soundCache = new LRUCache<String, Sound>(MAX_SOUNDS);
 
+    private final Log log = new Log(SoundSystem.class);
+
+    public SoundSystem() {
+        super(Aspect.getAspectForAll(Audible.class));
+    }
+
     @Override
-    public void create() {
+    protected void initialize() {
         soundCache.setEntryRemovedListener(new LRUCache.CacheEntryRemovedListener<String, Sound>() {
             public void notifyEntryRemoved(String key, Sound value) {
-                logDebug("Disposing sound: " + key);
+                log.debug("Disposing sound: " + key);
                 value.dispose();
             }
         });
+
+        // TODO: Preload sounds
     }
 
+    @Override
+    protected void processEntities(ImmutableBag<Entity> entities) {
+        // TODO: Implement
+    }
+
+    @Override
+    protected boolean checkProcessing() {
+        return true;
+    }
+
+
+    /**
+     * Plays the specified sound.
+     */
     public void play(SoundResourceHandle sound) {
         play(sound.getFileName());
     }
 
+    /**
+     * Plays the sound in the specified file.
+     */
     public void play(String soundFileName)
     {
         // Check if the sound is enabled
@@ -56,12 +90,15 @@ public class SoundServiceImpl extends ServiceBase implements SoundService {
         }
 
         // Play the sound
-        logDebug("Playing sound: " + soundFileName);
+        log.debug("Playing sound: " + soundFileName);
         soundToPlay.play( volume );
     }
 
+    /**
+     * Sets the sound volume which must be inside the range [0,1].
+     */
     public void setVolume(float volume) {
-        logDebug("Adjusting sound volume to: " + volume);
+        log.debug("Adjusting sound volume to: " + volume);
 
         // Check and set the new volume
         if( volume < 0 || volume > 1f ) {
@@ -70,19 +107,18 @@ public class SoundServiceImpl extends ServiceBase implements SoundService {
         this.volume = volume;
     }
 
+    /**
+     * Enables or disabled the sound.
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    @Override
     public void dispose() {
         for( Sound sound : soundCache.retrieveAll() ) {
             sound.stop();
             sound.dispose();
         }
     }
-
-
-
 
 }

@@ -10,24 +10,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class Pic extends Component implements Appearance {
 
     private String name;
-    private float worldWidth = 1;
-    private float worldHeight = 1;
     private float picOriginX = 0.5f;
     private float picOriginY = 0f;
     private TextureAtlas.AtlasRegion atlasRegion = null;
 
+
+
     public Pic(String name) {
-        this(name, 1, 1);
+        this(name, 0.5f, 0f);
     }
 
-    public Pic(String name, float worldWidth, float worldHeight) {
-        this(name, worldWidth, worldHeight, 0.5f, 0f);
-    }
-
-    public Pic(String name, float worldWidth, float worldHeight, float picOriginX, float picOriginY) {
+    public Pic(String name, float picOriginX, float picOriginY) {
         this.name = name;
-        this.worldWidth = worldWidth;
-        this.worldHeight = worldHeight;
         this.picOriginX = picOriginX;
         this.picOriginY = picOriginY;
     }
@@ -35,8 +29,8 @@ public class Pic extends Component implements Appearance {
     public void render(float screenX, float screenY, float scaleWorldToScreen, SpriteBatch batch, TextureAtlas atlas) {
         if (atlasRegion == null) atlasRegion = atlas.findRegion(name);
 
-        float screenW = worldWidth * scaleWorldToScreen;
-        float screenH = worldHeight * scaleWorldToScreen;
+        float screenW = atlasRegion.getRegionWidth()  * scaleWorldToScreen;
+        float screenH = atlasRegion.getRegionHeight() * scaleWorldToScreen;
 
         float screenBotLeftX = screenX - picOriginX * screenW;
         float screenBotLeftY = screenY - picOriginY * screenH;
@@ -44,20 +38,14 @@ public class Pic extends Component implements Appearance {
         batch.draw(atlasRegion, screenBotLeftX, screenBotLeftY, screenW, screenH);
     }
 
-    public float getWorldWidth() {
-        return worldWidth;
+    public float getWidth() {
+        if (atlasRegion != null) return atlasRegion.getRegionWidth();
+        else return 128;
     }
 
-    public float getWorldHeight() {
-        return worldHeight;
-    }
-
-    public void setWorldWidth(float worldWidth) {
-        this.worldWidth = worldWidth;
-    }
-
-    public void setWorldHeight(float worldHeight) {
-        this.worldHeight = worldHeight;
+    public float getHeight() {
+        if (atlasRegion != null) return atlasRegion.getRegionHeight();
+        else return 128;
     }
 
     public String getName() {
@@ -89,5 +77,15 @@ public class Pic extends Component implements Appearance {
      */
     public void setPicOriginY(float picOriginY) {
         this.picOriginY = picOriginY;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Pic{" +
+                "name='" + name + '\'' +
+                ", picOriginX=" + picOriginX +
+                ", picOriginY=" + picOriginY +
+                '}';
     }
 }

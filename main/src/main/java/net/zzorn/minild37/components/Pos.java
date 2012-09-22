@@ -24,4 +24,13 @@ public class Pos extends Component {
         this.y = y;
         this.z = z;
     }
+
+    @Override
+    public String toString() {
+        return "Pos{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }

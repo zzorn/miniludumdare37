@@ -1,12 +1,10 @@
 package net.zzorn.minild37.services.options;
 
 
-import net.zzorn.minild37.services.Service;
-
 /**
  * Service for managing players settings.
  */
-public interface OptionsService extends Service {
+public interface OptionsService {
 
     /**
      * Set an option.

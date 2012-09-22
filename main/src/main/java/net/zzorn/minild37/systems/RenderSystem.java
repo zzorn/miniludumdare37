@@ -11,18 +11,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import net.zzorn.minild37.WorldCam;
-import net.zzorn.minild37.WorldCamImpl;
+import net.zzorn.minild37.camera.WorldCam;
+import net.zzorn.minild37.camera.WorldCamImpl;
 import net.zzorn.minild37.components.Pic;
 import net.zzorn.minild37.components.Pos;
+import net.zzorn.minild37.utils.Log;
 
 import java.util.Comparator;
 
 /**
  * Renders things.
  */
-// TODO: Add another system for rendering gui:s, and register it after this system.
-public class RenderSystem extends EntitySystem {
+public class RenderSystem extends EntitySystem implements ResizeListener, Disposable {
     @Mapper ComponentMapper<Pos> posMapper;
     @Mapper ComponentMapper<Pic> picMapper;
 
@@ -46,6 +46,8 @@ public class RenderSystem extends EntitySystem {
         }
     };
 
+    private final Log log = new Log(RenderSystem.class);
+
     public RenderSystem(final String imagePackPath) {
         //noinspection unchecked
         super(Aspect.getAspectForAll(Pos.class, Pic.class));
@@ -59,11 +61,26 @@ public class RenderSystem extends EntitySystem {
         atlas = new TextureAtlas(Gdx.files.internal(imagePackPath));
     }
 
+    public void resize(int width, int height) {
+        worldCam.onResize(width, height);
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+    }
+
     /**
      * @return the camera used to project pictures from world to screen coordinates.
      */
     public WorldCam getWorldCam() {
         return worldCam;
+    }
+
+    @Override
+    protected void inserted(Entity e) {
+        sortedEntities.add(e);
+    }
+
+    @Override
+    protected void removed(Entity e) {
+        sortedEntities.removeValue(e, true);
     }
 
     @Override
@@ -74,12 +91,6 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     protected void processEntities(ImmutableBag<Entity> entities) {
-        // Copy entities into temporary array
-        sortedEntities.clear();
-        for (int i = 0; i < entities.size(); i++) {
-            sortedEntities.add(entities.get(i));
-        }
-
         // Sort the entities by depth
         sortedEntities.sort(entityDrawOrderComparator);
 
@@ -115,4 +126,13 @@ public class RenderSystem extends EntitySystem {
         return true;
     }
 
+    public final void dispose() {
+        batch.dispose();
+        atlas.dispose();
+    }
+
+
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
 }

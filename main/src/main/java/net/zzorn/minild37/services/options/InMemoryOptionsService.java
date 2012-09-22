@@ -1,15 +1,16 @@
 package net.zzorn.minild37.services.options;
 
 import com.badlogic.gdx.utils.ObjectMap;
-import net.zzorn.minild37.services.ServiceBase;
+import net.zzorn.minild37.utils.Log;
 
 /**
  * Simple implementation of OptionsService that just stores things in memory.
  */
-public class InMemoryOptionsService extends ServiceBase implements OptionsService {
+public class InMemoryOptionsService implements OptionsService {
 
     private final ObjectMap<String, Object> properties = new ObjectMap<String, Object>();
 
+    private final Log log = new Log(getClass());
 
     public void set(String key, Object value) {
         properties.put(key, value);

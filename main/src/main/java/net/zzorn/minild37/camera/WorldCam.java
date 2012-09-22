@@ -1,4 +1,4 @@
-package net.zzorn.minild37;
+package net.zzorn.minild37.camera;
 
 import net.zzorn.minild37.components.Pos;
 

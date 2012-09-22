@@ -1,70 +1,73 @@
-package net.zzorn.minild37;
+package net.zzorn.minild37.camera;
 
 import net.zzorn.minild37.components.Pos;
 
 import static net.zzorn.minild37.utils.ParameterChecker.checkPositiveNonZeroNormalNumber;
 
 /**
- *
+ * Isometric world camera
  */
 public class WorldCamImpl implements WorldCam {
 
-    private int screenW;
-    private int screenH;
+    private int screenW = 100;
+    private int screenH = 100;
 
-    private Pos worldFocusPos;
-    private float worldToScreenScaleFactor;
+    private Pos worldFocusPos = new Pos(0,0);
+    private float worldToScreenScaleFactor = 1;
 
-    @Override
+    private float tileImageWidth = 128;
+    private float tileImageHeight = 64;
+
     public void update(float deltaSeconds) {
         // TODO: Implement inertia and such to camera movements
     }
 
-    @Override
     public float transformWorldToScreen(Pos worldPos, Pos screenPos) {
-        // TODO: Implement
+        float screenCenterX = screenW * 0.5f;
+        float screenCenterY = screenH * 0.5f;
 
-        screenPos.z = worldPos.y;
+        screenPos.x = screenCenterX +
+                worldToScreenScaleFactor * 0.5f * tileImageWidth * (worldPos.x - worldFocusPos.x) -
+                worldToScreenScaleFactor * 0.5f * tileImageWidth * (worldPos.y - worldFocusPos.y);
+        screenPos.y = screenCenterY +
+                worldToScreenScaleFactor * 0.5f * tileImageHeight * (worldPos.x - worldFocusPos.x) +
+                worldToScreenScaleFactor * 0.5f * tileImageHeight * (worldPos.y - worldFocusPos.y);
+
+        screenPos.z = screenPos.y;
 
         return worldToScreenScaleFactor;
     }
 
-    @Override
     public float transformScreenToWorld(Pos screenPos, Pos worldPos) {
         // TODO: Implement
 
-        worldPos.z = 0;
+        throw new UnsupportedOperationException("Not yet implemented");
 
-        return 1.0f / worldToScreenScaleFactor;
+        //worldPos.z = 0;
+        //return 1.0f / worldToScreenScaleFactor;
     }
 
-    @Override
     public int getScreenWidth() {
         return screenW;
     }
 
-    @Override
     public int getScreenHeight() {
         return screenH;
     }
 
-    @Override
     public Pos getFocusPoint() {
         return worldFocusPos;
     }
 
-    @Override
     public void setFocusPoint(Pos focusPoint) {
         worldFocusPos = focusPoint;
     }
 
-    @Override
     public void onResize(int width, int height) {
         screenW = width;
         screenH = height;
     }
 
-    @Override
     public void setZoom(float worldToScreenScaleFactor) {
         checkPositiveNonZeroNormalNumber(worldToScreenScaleFactor, "worldToScreenScaleFactor");
 

@@ -22,10 +22,10 @@ public interface Appearance {
     /**
      * @return width of the appearance, in world units.
      */
-    public float getWorldWidth();
+    public float getWidth();
 
     /**
      * @return height of the appearance, in world units.
      */
-    public float getWorldHeight();
+    public float getHeight();
 }
